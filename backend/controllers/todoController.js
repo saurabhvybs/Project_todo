@@ -1,18 +1,17 @@
-const express = require("express");
-const router = express.Router();
 const User = require("../models/user");
 const List = require("../models/list");
 
-//add ToDo
-router.post("/addtodo", async (req, res) => {
+// Add Todo
+const addTodo = async (req, res) => {
   try {
     const { title, description, email } = req.body;
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       const list = new List({ title, description, user: existingUser });
-      await list.save().then(() => res.status(200).json({ list }));
+      await list.save();
       existingUser.list.push(list);
-      existingUser.save();
+      await existingUser.save();
+      return res.status(200).json({ list });
     } else {
       return res.status(404).json({ msg: "User not found" });
     }
@@ -20,13 +19,13 @@ router.post("/addtodo", async (req, res) => {
     console.error(error);
     return res.status(500).send("Something went wrong");
   }
-});
+};
 
-//Update ToDo
-router.put("/update/:id", async (req, res) => {
+// Update Todo
+const updateTodo = async (req, res) => {
   try {
     const { title, description, email } = req.body;
-    const existingUser = User.findOne({ email });
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
       const updatedList = await List.findByIdAndUpdate(
         req.params.id,
@@ -42,12 +41,13 @@ router.put("/update/:id", async (req, res) => {
       return res.status(404).json({ msg: "User not found" });
     }
   } catch (error) {
-    return res.status(400).send("something went wrong");
+    console.error(error);
+    return res.status(500).send("Something went wrong");
   }
-});
+};
 
-// Delete ToDo
-router.delete("/delete/:id", async (req, res) => {
+// Delete Todo
+const deleteTodo = async (req, res) => {
   try {
     const { email } = req.body;
 
@@ -56,26 +56,40 @@ router.delete("/delete/:id", async (req, res) => {
       { email },
       { $pull: { list: req.params.id } }
     );
+
     // Find and delete the list item
     if (existingUser) {
-      await List.findByIdAndDelete(req.params.id).then(() =>
-        res.status(200).json({ message: "ToDo Deleted" })
-      );
+      await List.findByIdAndDelete(req.params.id);
+      return res.status(200).json({ message: "ToDo Deleted" });
+    } else {
+      return res.status(404).json({ msg: "User not found" });
     }
   } catch (error) {
     console.error(error);
     return res.status(500).send("Something went wrong");
   }
-});
+};
 
-//get ToDo
-router.get("/get/:id", async (req,res) => {
-    const list =await List.find({user: req.params.id}).sort({createdAt : -1});
-    if(list.length!==0){
-        res.status(200).json({list:list});
-    }else{
-        res.status(200).json({"message":"No Tasks to Show"});
+// Get Todos
+const getTodos = async (req, res) => {
+  try {
+    const list = await List.find({ user: req.params.id }).sort({
+      createdAt: -1,
+    });
+    if (list.length !== 0) {
+      return res.status(200).json({ list });
+    } else {
+      return res.status(200).json({ message: "No Tasks to Show" });
     }
-})
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Something went wrong");
+  }
+};
 
-module.exports = router;
+module.exports = {
+  addTodo,
+  updateTodo,
+  deleteTodo,
+  getTodos,
+};

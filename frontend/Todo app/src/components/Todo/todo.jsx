@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBinLine } from "react-icons/ri";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Todo() {
   const [todos, setTodos] = useState([]);
@@ -11,6 +13,7 @@ export default function Todo() {
     if (title && description) {
       const newTodo = { title, description };
       setTodos([...todos, newTodo]);
+      toast.success("Todo added successfully");
       setTitle("");
       setDescription("");
     }
@@ -18,6 +21,7 @@ export default function Todo() {
 
   const deleteTodo = (indexToDelete) => {
     setTodos(todos.filter((_, index) => index !== indexToDelete));
+    toast.success("Todo deleted Successfully");
   };
 
   const updateTodo = (indexToUpdate) => {
@@ -25,11 +29,15 @@ export default function Todo() {
     setTitle(todoToUpdate.title);
     setDescription(todoToUpdate.description);
     deleteTodo(indexToUpdate);
+    toast.success("Please Update Your Todo !");
   };
 
   return (
     <div className="max-w-md mx-auto p-4">
+
       <div className="bg-white shadow-md rounded-lg p-4 mb-4">
+        
+      <ToastContainer/>
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">Add a Todo</h2>
         <input
           type="text"

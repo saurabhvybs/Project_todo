@@ -1,16 +1,20 @@
+require('dotenv').config();
 const mongoose = require("mongoose");
 
-const conn = async (req, res) => {
+const ConnectionParams = {
+  useNewUrlParser: true,    
+  useUnifiedTopology: true, 
+};
+
+const conn = async () => {
   try {
-    await mongoose
-      .connect(
-        "mongodb+srv://shaanvybss:Qwerty%40123@todo.lu7aey8.mongodb.net/?retryWrites=true&w=majority&appName=Todo"
-      )
+    await mongoose.connect(process.env.MONGO_URI, ConnectionParams)
       .then(() => {
         console.log("Db Connected");
       });
   } catch (error) {
-    res.status(400).json({ message: "Db Not Connected" });
+    console.error("Db Not Connected", error);
   }
 };
+
 conn();

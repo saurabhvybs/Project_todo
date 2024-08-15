@@ -1,1 +1,3 @@
 node_modules/
+boom/
+secret.env/

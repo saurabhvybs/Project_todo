@@ -1,8 +1,32 @@
 import React from 'react'
+import { useState } from 'react';
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
+
 
 export default function Contact() {
+        const [name, setName] = useState('');
+        const [email, setEmail] = useState('');
+        const [tel, setTel] = useState('');
+
+        const submit = (event) => {
+            event.preventDefault();
+
+            if(tel && email && name){
+                toast.success("Submitted Successfully! We will contact you soon");
+                toast.submit("Thank you for connecting");
+                setName("");
+                setEmail("");
+                setTel("");
+            }else{
+              toast.error("Please Fill all the fields");  
+            }
+            }
+
     return (
         <div className="relative flex items-top justify-center min-h-[700px] bg-white sm:items-center sm:pt-0">
+            <ToastContainer/>
             <div className="max-w-6xl mx-auto sm:px-6 lg:px-8">
                 <div className="mt-8 overflow-hidden">
                     <div className="grid grid-cols-1 md:grid-cols-2">
@@ -93,9 +117,11 @@ export default function Contact() {
                                     Full Name
                                 </label>
                                 <input
-                                    type="name"
+                                    type="text"
                                     name="name"
                                     id="name"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
                                     placeholder="Full Name"
                                     className="w-100 mt-2 py-3 px-3 rounded-lg bg-white border border-gray-400 text-gray-800 font-semibold focus:border-orange-500 focus:outline-none"
                                 />
@@ -109,6 +135,8 @@ export default function Contact() {
                                     type="email"
                                     name="email"
                                     id="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
                                     placeholder="Email"
                                     className="w-100 mt-2 py-3 px-3 rounded-lg bg-white border border-gray-400 text-gray-800 font-semibold focus:border-orange-500 focus:outline-none"
                                 />
@@ -122,6 +150,8 @@ export default function Contact() {
                                     type="tel"
                                     name="tel"
                                     id="tel"
+                                    value={tel}
+                                    onChange={(e) => setTel(e.target.value)}
                                     placeholder="Telephone Number"
                                     className="w-100 mt-2 py-3 px-3 rounded-lg bg-white border border-gray-400 text-gray-800 font-semibold focus:border-orange-500 focus:outline-none"
                                 />
@@ -129,6 +159,7 @@ export default function Contact() {
 
                             <button
                                 type="submit"
+                                onClick={submit}
                                 className="md:w-32 bg-orange-700 hover:bg-blue-dark text-white font-bold py-3 px-6 rounded-lg mt-3 hover:bg-orange-600 transition ease-in-out duration-300"
                             >
                                 Submit

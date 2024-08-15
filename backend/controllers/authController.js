@@ -1,14 +1,13 @@
-//This Page is Responsible for the Signup and Signin Part authentication.
-
-const express = require("express");
-const router = express.Router();
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
-const { z } = require("zod"); 
+const { z } = require("zod");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+
 const { registerSchema, loginSchema } = require("../validators/userValidators");
 
-// Sign Up
-router.post("/register", async (req, res) => {
+// Register Controller
+const register = async (req, res) => {
   try {
     // Validate request body
     registerSchema.parse(req.body);
@@ -31,14 +30,16 @@ router.post("/register", async (req, res) => {
     return res.status(201).json({ user });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return res.status(400).json({ msg: error.errors.map(err => err.message) });
+      return res
+        .status(400)
+        .json({ msg: error.errors.map((err) => err.message) });
     }
     return res.status(500).json({ msg: "Server Error" });
   }
-});
+};
 
-// Sign In
-router.post("/login", async (req, res) => {
+// Login Controller
+const login = async (req, res) => {
   try {
     // Validate request body
     loginSchema.parse(req.body);
@@ -48,7 +49,9 @@ router.post("/login", async (req, res) => {
     // Find the user by email
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(404).json({ msg: "User Does Not Exist! Please Register" });
+      return res
+        .status(404)
+        .json({ msg: "User Does Not Exist! Please Register" });
     }
 
     // Compare passwords
@@ -56,16 +59,30 @@ router.post("/login", async (req, res) => {
     if (!isPasswordCorrect) {
       return res.status(400).json({ msg: "Password Incorrect" });
     }
-
+    console.log("User Data:", user); // for debugging baad mein isko hata dena yaad se 
     // Exclude password from user data
     const { password: userPassword, ...others } = user._doc;
-    return res.status(200).json({ user: others });
+
+              // Generate JWT Token
+              try {
+                const token = jwt.sign(
+                  { userId: user._id, email: user.email },
+                  process.env.SECRET,
+                  { expiresIn: "10h" }
+                );
+                return res.json({ token, user: others }); // Send token and user data as response
+              } catch (err) {
+                console.error("Error generating token:", err);
+                return res.status(500).json({ msg: "Internal Server Error" });
+              }
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return res.status(400).json({ msg: error.errors.map(err => err.message) });
+      return res
+        .status(400)
+        .json({ msg: error.errors.map((err) => err.message) });
     }
     return res.status(500).json({ msg: "Unexpected Error Occurred" });
   }
-});
+};
 
-module.exports = router;
+module.exports = { register, login };

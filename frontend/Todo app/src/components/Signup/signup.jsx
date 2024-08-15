@@ -1,7 +1,34 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React,{ useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axiosInstance from "../../api/axiosInstance";
 
 export default function Signup() {
+
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const navigate = useNavigate();
+
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    const userData = { email, username, password };
+
+    try {
+      // Make the API request using axios instance
+      const response = await axiosInstance.post('/register', userData);
+
+      console.log('User registered successfully:', response.data);
+      
+      // Redirect to login page or todo page after successful registration
+      navigate('/login'); // Redirect to login page
+    } catch (err) {
+      setError(err.response?.data?.msg || 'Registration failed');
+    }
+  };
   return (
     <div className="relative flex items-top justify-center min-h-[700px] bg-white sm:items-center sm:pt-0">
       <div className="max-w-6xl mx-auto sm:px-6 lg:px-8">
@@ -27,7 +54,7 @@ export default function Signup() {
               <div className="flex items-center mt-8 text-gray-600"></div>
             </div>
 
-            <form className="p-6 flex flex-col justify-center">
+            <form onSubmit={handleSubmit} className="p-6 flex flex-col justify-center">
               <div className="flex flex-col">
                 <h2 className="text-3xl sm:text-4xl text-gray-800 font-extrabold tracking-tight">
                   Sign up
@@ -41,6 +68,8 @@ export default function Signup() {
                   name="email"
                   id="email"
                   placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="w-100 mt-2 py-3 px-3 rounded-lg bg-white border border-gray-400 text-gray-800 font-semibold focus:border-orange-500 focus:outline-none"
                 />
               </div>
@@ -54,6 +83,8 @@ export default function Signup() {
                   name="name"
                   id="name"
                   placeholder="Username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                   className="w-100 mt-2 py-3 px-3 rounded-lg bg-white border border-gray-400 text-gray-800 font-semibold focus:border-orange-500 focus:outline-none"
                 />
               </div>
@@ -67,9 +98,12 @@ export default function Signup() {
                   name="password"
                   id="password"
                   placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="w-100 mt-2 py-3 px-3 rounded-lg bg-white border border-gray-400 text-gray-800 font-semibold focus:border-orange-500 focus:outline-none"
                 />
               </div>
+              {error && <p className="text-red-500">{error}</p>}
 
               <button
                 type="submit"
