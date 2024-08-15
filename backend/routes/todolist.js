@@ -1,4 +1,5 @@
 const express = require("express");
+const authenticate = require('../middleware/authenticate');
 const router = express.Router();
 const {
   addTodo,
@@ -9,7 +10,7 @@ const {
 
 router.post("/addtodo", addTodo);
 router.put("/update/:id", updateTodo);
-router.delete("/delete/:id", deleteTodo);
-router.get("/get/:id", getTodos);
+router.delete("/delete/:id",authenticate, deleteTodo);
+router.get("/todos/:id",authenticate, getTodos);
 
 module.exports = router;

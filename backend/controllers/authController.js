@@ -70,7 +70,7 @@ const login = async (req, res) => {
                   process.env.SECRET,
                   { expiresIn: "10h" }
                 );
-                return res.json({ token, user: others }); // Send token and user data as response
+                return res.json({ token, user: others, email: user.email }); // Send token and user data as response
               } catch (err) {
                 console.error("Error generating token:", err);
                 return res.status(500).json({ msg: "Internal Server Error" });

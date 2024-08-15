@@ -15,6 +15,7 @@ export const loginUser = createAsyncThunk(
       const { token, user } = response.data;
         // Assuming the response contains both
       localStorage.setItem("token", token); // Store token
+      localStorage.setItem("email", email); // Store email
       return user;
 
     } catch (err) {
