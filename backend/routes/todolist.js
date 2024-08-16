@@ -8,9 +8,9 @@ const {
   getTodos,
 } = require("../controllers/todoController");
 
-router.post("/addtodo", addTodo);
-router.put("/update/:id", updateTodo);
+router.post("/addtodo",authenticate, addTodo);
+router.put("/update/:id",authenticate, updateTodo);
 router.delete("/delete/:id",authenticate, deleteTodo);
-router.get("/todos/:id",authenticate, getTodos);
+router.get("/todos/:email",authenticate, getTodos);
 
 module.exports = router;

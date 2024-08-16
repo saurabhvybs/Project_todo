@@ -18,7 +18,7 @@ export default function Todo() {
   useEffect(() => {
     const fetchTodos = async () => {
       try {
-        const response = await todoAxiosInstance.get(`/get/${email}`);
+        const response = await todoAxiosInstance.get(`/todos/${email}`);
         dispatch(setTodos(response.data.list)); // Adjust based on the actual response structure
       } catch (error) {
         toast.error("Failed to fetch todos");
@@ -50,6 +50,7 @@ export default function Todo() {
         setDescription("");
       } catch (error) {
         toast.error("Failed to add or update todo");
+        
       }
     }
   };

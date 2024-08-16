@@ -60,11 +60,19 @@ const deleteTodo = async (req, res) => {
     return res.status(500).send("Something went wrong");
   }
 };
-
-// Get Todos
+//getTodos 
 const getTodos = async (req, res) => {
   try {
-    const list = await List.find({ user: req.params.id }).sort({ createdAt: -1 });
+    // Find the user by email
+    const user = await User.findOne({ email: req.params.email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Now find the lists associated with this user
+    const list = await List.find({ user: user._id }).sort({ createdAt: -1 });
+
     if (list.length !== 0) {
       return res.status(200).json({ list });
     } else {
@@ -75,6 +83,7 @@ const getTodos = async (req, res) => {
     return res.status(500).send("Something went wrong");
   }
 };
+
 
 module.exports = {
   addTodo,
