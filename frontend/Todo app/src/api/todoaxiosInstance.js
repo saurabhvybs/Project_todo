@@ -18,4 +18,16 @@ todoAxiosInstance.interceptors.request.use((config) => {
   return Promise.reject(error);
 });
 
+// Add a response interceptor
+todoAxiosInstance.interceptors.response.use(
+  (response) => {
+    console.log('Response Data:', response.data); // Log the response data here
+    return response; // Return the response for further handling
+  },
+  (error) => {
+    console.error('Response Error:', error.response ? error.response.data : error.message); // Log the error
+    return Promise.reject(error);
+  }
+);
+
 export default todoAxiosInstance;

@@ -1,30 +1,38 @@
-import { createSlice} from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    todos: []
+  todos: [],
 };
 
 export const todoSlice = createSlice({
-    name: 'todo',
-    initialState,
-    reducers: {
-        setTodos: (state, action) => {
-            state.todos = action.payload;
-        },
-        addTodo: (state, action) => {
-            state.todos.push(action.payload);
-        },
-        updateTodo: (state, action) => {
-            const { id, updatedTodo } = action.payload;
-            const index = state.todos.findIndex(todo => todo._id === id);
-            if (index !== -1) {
-                state.todos[index] = updatedTodo;
-            }
-        },
-        removeTodo: (state, action) => {
-            state.todos = state.todos.filter(todo => todo._id !== action.payload);
-        },
-    }
+  name: "todo",
+  initialState,
+  reducers: {
+    setTodos: (state, action) => {
+      state.todos = action.payload;
+    },
+    // addTodo: (state, action) => {
+    //     state.todos.push(action.payload);
+    // }
+    addTodo: (state, action) => {
+      if (!Array.isArray(state.todos)) {
+        console.error("State.todos is not an array:", state.todos);
+        return;
+      }
+      state.todos.push(action.payload);
+    },
+
+    updateTodo: (state, action) => {
+      const { id, updatedTodo } = action.payload;
+      const index = state.todos.findIndex((todo) => todo._id === id);
+      if (index !== -1) {
+        state.todos[index] = updatedTodo;
+      }
+    },
+    removeTodo: (state, action) => {
+      state.todos = state.todos.filter((todo) => todo._id !== action.payload);
+    },
+  },
 });
 
 export const { setTodos, addTodo, updateTodo, removeTodo } = todoSlice.actions;

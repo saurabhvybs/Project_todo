@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import LogoutButton from "../Logout/logout";
 
 export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+
+const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+console.log("isAuthenticated:", isAuthenticated);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -26,7 +31,8 @@ export default function NavBar() {
             <img src="/Images/logo3.png" className="mr-3 h-12" alt="Logo" />
           </Link>
           <div className="flex items-center lg:order-2">
-            <Link
+            {!isAuthenticated ? (<>
+              <Link
               to="/login"
               className="text-gray-800 hover:bg-gray-100 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none"
             >
@@ -38,6 +44,8 @@ export default function NavBar() {
             >
               Get started
             </Link>
+            </>) : (<LogoutButton/>)}
+     
             <button
               type="button"
               className="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"

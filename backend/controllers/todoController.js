@@ -1,7 +1,7 @@
 const User = require("../models/user");
 const List = require("../models/list");
 
-// Add Todo
+// // Add Todo
 const addTodo = async (req, res) => {
   try {
     const { title, description, email } = req.body;
@@ -11,7 +11,19 @@ const addTodo = async (req, res) => {
       await list.save();
       existingUser.list.push(list);
       await existingUser.save();
-      return res.status(200).json(list);
+
+      const safeResponse = {
+        _id: list._id,
+        title: list.title,
+        description: list.description,
+        user: {
+          _id: existingUser._id,
+          email: existingUser.email,
+          // Include only necessary properties
+        },
+      };
+  
+      return res.status(200).json(safeResponse);
     } else {
       return res.status(404).json({ msg: "User not found" });
     }
@@ -20,6 +32,7 @@ const addTodo = async (req, res) => {
     return res.status(500).send("Something went wrong");
   }
 };
+
 
 // Update Todo
 const updateTodo = async (req, res) => {

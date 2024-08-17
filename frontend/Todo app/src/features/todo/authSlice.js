@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axiosInstance from '../../api/axiosInstance' ; 
+import axiosInstance from '../../api/axiosInstance';
 
 // Thunk for login action
 export const loginUser = createAsyncThunk(
@@ -13,7 +13,7 @@ export const loginUser = createAsyncThunk(
       const response = await axiosInstance.post("/login", { email, password });
 
       const { token, user } = response.data;
-        // Assuming the response contains both
+      // Assuming the response contains both
       localStorage.setItem("token", token); // Store token
       localStorage.setItem("email", email); // Store email
       return user;
@@ -28,15 +28,20 @@ export const loginUser = createAsyncThunk(
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    user: null,
-    isAuthenticated: false,
+    user: JSON.parse(localStorage.getItem('user')) || null, // Load user from localStorage
+    isAuthenticated: !!localStorage.getItem('token'),
     status: "idle", // 'idle' | 'loading' | 'succeeded' | 'failed'
     error: null,
   },
   reducers: {
     logout: (state) => {
+      // Clear the user state and isAuthenticated flag
       state.user = null;
       state.isAuthenticated = false;
+      
+      // Remove JWT and email from localStorage
+      localStorage.removeItem("token");
+      localStorage.removeItem("email");
     },
   },
   extraReducers: (builder) => {

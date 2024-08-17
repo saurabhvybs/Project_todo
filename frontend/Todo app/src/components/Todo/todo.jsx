@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBinLine } from "react-icons/ri";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import todoAxiosInstance from '../../api/todoaxiosInstance';
-import { useDispatch, useSelector } from 'react-redux';
-import { setTodos, addTodo, updateTodo, removeTodo } from '../../features/todo/todoSlice';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import todoAxiosInstance from "../../api/todoaxiosInstance";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setTodos,
+  addTodo,
+  updateTodo,
+  removeTodo,
+} from "../../features/todo/todoSlice";
 
 export default function Todo() {
   const [title, setTitle] = useState("");
@@ -13,19 +18,27 @@ export default function Todo() {
   const [editingId, setEditingId] = useState(null); // Track the todo being edited
   const dispatch = useDispatch();
   const todos = useSelector((state) => state.todo.todos);
-  const email = localStorage.getItem('email'); // Ensure userEmail is set during login
+  const email = localStorage.getItem("email"); // Ensure userEmail is set during login
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchTodos = async () => {
       try {
         const response = await todoAxiosInstance.get(`/todos/${email}`);
-        dispatch(setTodos(response.data.list)); // Adjust based on the actual response structure
+        if (isMounted) {
+          dispatch(setTodos(response.data.list));
+        }
       } catch (error) {
         toast.error("Failed to fetch todos");
       }
     };
 
     fetchTodos();
+
+    return () => {
+      isMounted = false;
+    };
   }, [email, dispatch]);
 
   const handleAddTodo = async () => {
@@ -33,24 +46,39 @@ export default function Todo() {
       try {
         if (editingId) {
           // If editing, update the existing todo
-          const response = await todoAxiosInstance.put(`/update/${editingId}`, { title, description, email });
-          dispatch(updateTodo({
-            id: editingId,
-            updatedTodo: response.data
-          }));
+          const response = await todoAxiosInstance.put(`/update/${editingId}`, {
+            title,
+            description,
+            email,
+          });
+          dispatch(
+            updateTodo({
+              id: editingId,
+              updatedTodo: response.data,
+            })
+          );
           toast.success("Todo updated successfully");
           setEditingId(null); // Reset editing state
         } else {
           // If not editing, add a new todo
-          const response = await todoAxiosInstance.post('/addtodo', { title, description, email });
-          dispatch(addTodo(response.data));
-          toast.success("Todo added successfully");
+          try {
+            const response = await todoAxiosInstance.post("/addtodo", {
+              title,
+              description,
+              email,
+            });
+            console.log("Add Response:", response.data);
+            dispatch(addTodo(response.data));
+            toast.success("Todo added successfully");
+          } catch (error) {
+            console.error("Error:", error);
+            toast.error("blunder");
+          }
         }
         setTitle("");
         setDescription("");
       } catch (error) {
         toast.error("Failed to add or update todo");
-        
       }
     }
   };
@@ -76,7 +104,9 @@ export default function Todo() {
     <div className="max-w-md mx-auto p-4">
       <div className="bg-white shadow-md rounded-lg p-4 mb-4">
         <ToastContainer />
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Add a Todo</h2>
+        <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+          Add a Todo
+        </h2>
         <input
           type="text"
           placeholder="Title"
@@ -99,24 +129,29 @@ export default function Todo() {
       </div>
 
       <div>
-        {todos.map((todo, index) => (
-          <div key={todo._id} className="bg-white shadow-md rounded-lg p-4 mb-4 flex justify-between items-center">
-            <div>
-              <h3 className="text-xl font-semibold text-gray-800">{todo.title}</h3>
-              <p className="text-gray-600">{todo.description}</p>
+        {Array.isArray(todos) && todos.map((todo) => (
+            <div
+              key={todo._id}
+              className="bg-white shadow-md rounded-lg p-4 mb-4 flex justify-between items-center"
+            >
+              <div>
+                <h3 className="text-xl font-semibold text-gray-800">
+                  {todo.title}
+                </h3>
+                <p className="text-gray-600">{todo.description}</p>
+              </div>
+              <div className="flex space-x-2">
+                <FaEdit
+                  onClick={() => startEditingTodo(todo)}
+                  className="text-gray-600 size-5 hover:text-orange-600 cursor-pointer"
+                />
+                <RiDeleteBinLine
+                  onClick={() => handleDeleteTodo(todo._id)}
+                  className="text-gray-600 size-5 hover:text-orange-700 cursor-pointer"
+                />
+              </div>
             </div>
-            <div className="flex space-x-2">
-              <FaEdit
-                onClick={() => startEditingTodo(todo)}
-                className="text-gray-600 size-5 hover:text-orange-600 cursor-pointer"
-              />
-              <RiDeleteBinLine
-                onClick={() => handleDeleteTodo(todo._id)}
-                className="text-gray-600 size-5 hover:text-orange-700 cursor-pointer"
-              />
-            </div>
-          </div>
-        ))}
+          ))}
       </div>
     </div>
   );

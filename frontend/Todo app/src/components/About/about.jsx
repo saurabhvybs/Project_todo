@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 
 export default function About() {
   const location1 = useLocation();
@@ -25,18 +25,22 @@ export default function About() {
           </div>
           <div className="md:7/12 lg:w-6/12">
             <h2 className="text-2xl text-gray-900 font-bold md:text-4xl">
-              React development is carried out by passionate developers
+              Empowering Task Management with a Seamless User Experience
             </h2>
             <p className="mt-6 text-gray-600">
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eum omnis
-              voluptatem accusantium nemo perspiciatis delectus atque autem!
-              Voluptatum tenetur beatae unde aperiam, repellat expedita consequatur!
-              Officiis id consequatur atque doloremque!
+              Our TODO application is meticulously developed by a dedicated team
+              of developers who are passionate about creating seamless digital
+              experiences. We understand the importance of effective task
+              management, which is why every feature in this app is designed
+              with the user in mind.
             </p>
             <p className="mt-4 text-gray-600">
-              Nobis minus voluptatibus pariatur dignissimos libero quaerat iure
-              expedita at? Asperiores nemo possimus nesciunt dicta veniam
-              aspernatur quam mollitia.
+              With a focus on simplicity and efficiency, our app provides a
+              robust platform for organizing your tasks, no matter how big or
+              small. Built using the latest web technologies, it ensures a
+              smooth and responsive experience. We are committed to continuously
+              enhancing the app, driven by user feedback and the evolving needs
+              of our community.
             </p>
           </div>
         </div>
