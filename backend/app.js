@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require("express");
 const cors = require('cors');
 
@@ -18,6 +20,8 @@ app.use("/api/v1",auth);
 app.use("/api/v2",list);
 app.use("/api/v3",contact);
 
-app.listen(1000, () => {
-  console.log("Server Started");
+const PORT = process.env.PORT || 1000;
+
+app.listen(PORT, () => {
+  console.log(`Server started on port ${PORT}`);
 });
