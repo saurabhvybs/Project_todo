@@ -5,5 +5,14 @@
     "toastify": "^2.0.1",
     "vite": "^5.3.4",
     "zod": "^3.23.8"
+  },
+  "scripts": {
+    "dev": "vite",                      
+    "build": "vite build",              
+    "serve": "vite preview",            
+    "start": "vite build && vite preview",  
+    "lint": "eslint --fix src",         
+    "test": "jest"              
   }
 }
+
