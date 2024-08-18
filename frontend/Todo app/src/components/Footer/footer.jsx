@@ -46,7 +46,7 @@ export default function Footer() {
                                 </li>
                                 <li>
                                 <a
-                                        href="https://discord.com/invite/42hAG55S"
+                                        href="https://discord.com/invite/aC6faH8t"
                                         className="hover:underline"
                                         target="_blank"
                                         rel="noreferrer"
@@ -97,7 +97,7 @@ export default function Footer() {
                             </svg>
                             <span className="sr-only">Facebook page</span>
                         </Link>
-                        <Link to="#" className="text-gray-500">
+                        <Link to="https://discord.com/invite/aC6faH8t" className="text-gray-500">
                             <svg
                                 className="w-4 h-4"
                                 aria-hidden="true"
@@ -125,7 +125,7 @@ export default function Footer() {
                             </svg>
                             <span className="sr-only">Twitter page</span>
                         </Link>
-                        <Link to="#" className="text-gray-500">
+                        <Link to="https://github.com/saurabhvybs/" className="text-gray-500">
                             <svg
                                 className="w-4 h-4"
                                 aria-hidden="true"

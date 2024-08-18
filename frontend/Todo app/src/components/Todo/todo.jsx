@@ -10,7 +10,7 @@ import {
   addTodo,
   updateTodo,
   removeTodo,
-} from "../../features/todo/todoSlice";
+} from "../../features/todo/todoSlice"; 
 
 export default function Todo() {
   const [title, setTitle] = useState("");
@@ -21,15 +21,20 @@ export default function Todo() {
   const email = localStorage.getItem("email"); // Ensure userEmail is set during login
 
   useEffect(() => {
-    let isMounted = true;
-
+      let isMounted =true;
     const fetchTodos = async () => {
       try {
         const response = await todoAxiosInstance.get(`/todos/${email}`);
-        if (isMounted) {
-          dispatch(setTodos(response.data.list));
+        if(isMounted){
+          if (response.data.list && response.data.list.length > 0) {
+            dispatch(setTodos(response.data.list));
+          } else {
+            toast.info("No todos found"); // Optional: Notify the user if the list is empty
+          }
         }
-      } catch (error) {
+      }
+       catch (error) {
+        console.log(" response is :",response.data)
         toast.error("Failed to fetch todos");
       }
     };
