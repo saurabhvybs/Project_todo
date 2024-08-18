@@ -14,7 +14,7 @@ export default function Contact() {
     if (tel && email && name) {
       try {
         const response = await axios.post(
-          "http://localhost:1000/api/v3/contact",
+          "https://project-todo-dovo.onrender.com/api/v3/contact",
           {
             username: name,
             email: email,

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const todoAxiosInstance = axios.create({
-  baseURL: 'http://localhost:1000/api/v2',
+  baseURL: 'https://project-todo-dovo.onrender.com/api/v2',
   headers: {
     'Content-Type': 'application/json',
   },
