@@ -35,9 +35,83 @@ A simple todo list application built with the MERN stack. This project demonstra
 - Node.js (>=16.x.x)
 - npm or Yarn
 
-### Installation
+
+## Installation
 
 1. **Clone the repository**:
 
-   ```bash
-   git clone https://github.com/your-username/todo-app.git
+    ```bash
+    git clone https://github.com/your-username/todo-app.git
+    cd todo-app
+    ```
+
+2. **Install dependencies for the frontend**:
+
+    ```bash
+    cd frontend
+    npm install
+    ```
+
+3. **Install dependencies for the backend**:
+
+    ```bash
+    cd ../backend
+    npm install
+    ```
+
+### Configuration
+
+1. **Create a `.env` file in the `backend` directory** and add the following environment variables:
+
+    ```env
+    MONGO_URI=mongodb://localhost:27017/yourdbname
+    JWT_SECRET=your_jwt_secret
+    PORT=5000
+    ```
+
+2. **Create a `.env` file in the `frontend` directory** (if needed) to configure environment variables for the frontend.
+
+### Running the Application
+
+1. **Start the backend server**:
+
+    ```bash
+    cd backend
+    npm run dev
+    ```
+
+2. **Start the frontend development server**:
+
+    ```bash
+    cd ../frontend
+    npm run dev
+    ```
+
+### Building for Production
+
+1. **Build the frontend application**:
+
+    ```bash
+    cd frontend
+    npm run build
+    ```
+
+2. **Start the production server** (you may need to serve the built frontend with the backend or use a static file server):
+
+    ```bash
+    npm run preview
+    ```
+
+### API Endpoints
+
+- **POST /api/users/register**: Register a new user.
+- **POST /api/users/login**: Authenticate a user and get a JWT.
+- **GET /api/todos**: Get all todos.
+- **POST /api/todos**: Create a new todo.
+- **PUT /api/todos/:id**: Update a todo.
+- **DELETE /api/todos/:id**: Delete a todo.
+
+### Contributing
+
+Feel free to open issues or submit pull requests to contribute to the project.
+
