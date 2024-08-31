@@ -4,9 +4,6 @@ const express = require("express");
 const cors = require('cors');
 
 require("./conn/db");
-require("./models/list");
-require("./models/contact");
-require("./models/user");
 
 const auth = require("./routes/authuser");
 const list = require("./routes/todolist");
